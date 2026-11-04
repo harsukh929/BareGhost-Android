@@ -34,3 +34,19 @@ Do not substitute the desktop Qt application, embed the upstream APK as if it we
 5. Build Bare Chromium separately on a suitable x86-64 Linux host, then package/test the combined app.
 
 DRM-protected media remains unavailable. No Widevine key extraction, decryption, or DRM bypass is part of this project.
+
+
+## Required repository access configuration
+
+The upstream reusable test workflow declares `ANDROID_REPO_TOKEN` as a required workflow secret and uses it to check out `XiaoYouChR/Ghost-Downloader-Android`. The same secret is passed by the upstream release workflow into its test job. This confirms that an ordinary anonymous checkout is not the supported path.
+
+For this project, configure a GitHub Actions repository secret named exactly `ANDROID_REPO_TOKEN` only if the upstream maintainer has granted the account/token read access to that Android host repository:
+
+1. Create a fine-grained personal access token (or other maintainer-approved credential) with read-only Contents access to the Android host repository.
+2. In `harsukh929/BareGhost-Android`, open **Settings → Secrets and variables → Actions → New repository secret**.
+3. Set the name to `ANDROID_REPO_TOKEN` and paste the token as the secret value.
+4. Never commit the token, put it in workflow YAML, or paste it into an issue or chat.
+
+A secret name alone does not grant repository access. If the upstream repository owner has not granted access, ask them for authorized source access or a supported integration package. Do not attempt to work around repository permissions.
+
+Until the authorized host source is available, CI can validate BareGhost's standalone policy and bridge contracts, but cannot validate or build the Ghost Android host. The current CI success must not be interpreted as an Android APK build.
