@@ -8,7 +8,7 @@ This repository tracks a combined Android browser/downloader project using:
 
 ## Current work
 - Pinned audited upstream revisions in `integration/upstream-lock.json`.
-- Added Kotlin browser-to-downloader request and host interfaces.
+- Added Kotlin browser-to-downloader request/host interfaces and a direct-download coordinator that forwards Bare's native download-start event to Ghost's enqueue API (once the real Ghost host is injected).
 - Added a versioned bridge schema and validation contract.
 - Added strict media-choice policy: only actual extractor formats with safe HTTP(S) URLs; generic Download only for a direct HTTP(S) URL; DRM-protected sources are unavailable.
 - Added GitHub Actions policy-test workflow.
@@ -33,4 +33,4 @@ The upstream Ghost APK is not a reusable library. Do not replace the missing hos
 ## Target
 Android ARM64 (`arm64-v8a`), with Bare's extension support where compatible, Ghost engines only where Android dependencies are verified, a compact in-player download affordance, and no DRM decryption or bypass.
 
-See `docs/ANDROID_AUDIT.md`, `docs/GHOST_ANDROID_BUILD.md`, `docs/GHOST_ANDROID_COMPATIBILITY.md`, `docs/BRIDGE_PROTOCOL.md`, `docs/BUILD_HOST.md`, and `LICENSES.md`.
+See `docs/BRIDGE_PROTOCOL.md` for the direct handoff flow. See `docs/ANDROID_AUDIT.md`, `docs/GHOST_ANDROID_BUILD.md`, `docs/GHOST_ANDROID_COMPATIBILITY.md`, `docs/BRIDGE_PROTOCOL.md`, `docs/BUILD_HOST.md`, and `LICENSES.md`.
