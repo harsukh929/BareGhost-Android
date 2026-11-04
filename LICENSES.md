@@ -1,0 +1,3 @@
+# Third-party license notices
+
+This starter contains original integration scaffolding, not copied upstream implementation files. Before integrating or distributing upstream code, pin exact commits, verify license files, preserve notices, review transitive dependencies, and provide corresponding source where required. Upstream READMEs identify Bare Browser as BSD-3-Clause and Ghost Downloader 3 as GPL-3.0. Obtain legal review before publishing a combined binary.
