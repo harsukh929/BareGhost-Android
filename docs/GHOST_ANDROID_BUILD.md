@@ -50,3 +50,16 @@ For this project, configure a GitHub Actions repository secret named exactly `AN
 A secret name alone does not grant repository access. If the upstream repository owner has not granted access, ask them for authorized source access or a supported integration package. Do not attempt to work around repository permissions.
 
 Until the authorized host source is available, CI can validate BareGhost's standalone policy and bridge contracts, but cannot validate or build the Ghost Android host. The current CI success must not be interpreted as an Android APK build.
+
+## Aria2 RPC integration audit (2026-11-04)
+
+The public Ghost source does contain an Aria2-compatible JSON-RPC/WebSocket listener. The settings page wires an `aria2RpcListener`, and the listener implementation binds only to loopback addresses (`127.0.0.1` and `::1`). Its tests exercise HTTP JSON-RPC and WebSocket calls, token checks, and `aria2.addUri`.
+
+This is useful as an interface reference, but it is **not by itself an embeddable Android engine**:
+- The listener is owned by a running Ghost application/engine instance; it does not launch the engine or package its dependencies.
+- The listener binds to loopback, so a separate Android app process cannot assume it can reach it through a normal network endpoint.
+- The public CLI `ghd` is installed from within the running desktop application; it is not evidence of a standalone Android service binary.
+- The upstream Android Gradle host is still required to package the Python runtime, native dependencies, app lifecycle, storage and background work.
+
+Therefore BareGhost may implement an Aria2-compatible client adapter later, but only after an authorized Ghost Android host/runtime is available and its supported process boundary is verified. Do not treat the RPC claim as resolving the missing Android host source.
+
