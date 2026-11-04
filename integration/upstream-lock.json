@@ -12,7 +12,7 @@
   "ghost_downloader": {
     "repository": "https://github.com/XiaoYouChR/Ghost-Downloader-3",
     "commit": "256b082166fec444b517dd3f4bb88c55ead1325b",
-    "inspected_release": "v4.4.5",
+    "minimum_android": "9.0",
     "abi": "arm64-v8a",
     "android_adapters": [
       "http_pack",
@@ -24,6 +24,7 @@
       "bili_pack",
       "github_pack",
       "huggingface_pack"
-    ]
+    ],
+    "yt_dlp_adapter_status": "draft"
   }
 }
