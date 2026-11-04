@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/bareghost/download-request.schema.json",
+  "title": "BareGhost browser-to-downloader request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pageUrl",
+    "mediaUrl",
+    "isIncognito",
+    "allowSessionCookies",
+    "headers"
+  ],
+  "properties": {
+    "pageUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "mediaUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "formatId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "headers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 8192
+      }
+    },
+    "isIncognito": {
+      "type": "boolean"
+    },
+    "allowSessionCookies": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "isIncognito": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "allowSessionCookies": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}
