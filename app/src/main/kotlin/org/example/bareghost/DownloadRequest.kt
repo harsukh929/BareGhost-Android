@@ -20,14 +20,22 @@ data class DownloadRequest(
     init {
         require(isHttpUrl(pageUrl)) { "Page URL must be HTTP(S)." }
         require(isHttpUrl(mediaUrl)) { "Media URL must be HTTP(S)." }
+        require(title == null || title.length <= MAX_TITLE_LENGTH) {
+            "Title is too long."
+        }
+        require(formatId == null || formatId.length <= MAX_FORMAT_ID_LENGTH) {
+            "Format ID is too long."
+        }
+        require(headers.size <= MAX_HEADERS) { "Too many HTTP headers." }
         require(!(isIncognito && allowSessionCookies)) {
             "Incognito requests must never forward session cookies."
         }
         headers.forEach { (name, value) ->
-            require(name.isNotBlank() && name.none { it == '\r' || it == '\n' }) {
-                "Invalid HTTP header name."
+            require(HEADER_NAME.matches(name)) { "Invalid HTTP header name." }
+            require(value.length <= MAX_HEADER_VALUE_LENGTH) {
+                "HTTP header value is too long."
             }
-            require(value.none { it == '\r' || it == '\n' }) {
+            require(value.none { it == '\\r' || it == '\\n' }) {
                 "Invalid HTTP header value."
             }
             if (!allowSessionCookies) {
@@ -40,6 +48,13 @@ data class DownloadRequest(
     }
 
     companion object {
+        private const val MAX_HEADERS = 64
+        private const val MAX_HEADER_VALUE_LENGTH = 8192
+        private const val MAX_TITLE_LENGTH = 512
+        private const val MAX_FORMAT_ID_LENGTH = 128
+        private val HEADER_NAME =
+            Regex("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
+
         private fun isHttpUrl(value: String): Boolean = try {
             val uri = URI(value)
             (uri.scheme.equals("http", true) || uri.scheme.equals("https", true)) &&
