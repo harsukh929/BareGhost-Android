@@ -53,19 +53,26 @@ Until the authorized host source is available, CI can validate BareGhost's stand
 
 ## Aria2 RPC integration audit (2026-11-04)
 
-The public Ghost source does contain an Aria2-compatible JSON-RPC/WebSocket listener. The settings page wires an `aria2RpcListener`, and the listener implementation binds only to loopback addresses (`127.0.0.1` and `::1`). Its tests exercise HTTP JSON-RPC and WebSocket calls, token checks, and `aria2.addUri`.
+The public Ghost source contains an Aria2-compatible JSON-RPC/WebSocket listener. The inspected implementation establishes:
 
-This is useful as an interface reference, but it is **not by itself an embeddable Android engine**:
-- The listener is owned by a running Ghost application/engine instance; it does not launch the engine or package its dependencies.
-- The listener binds to loopback, so a separate Android app process cannot assume it can reach it through a normal network endpoint.
-- The public CLI `ghd` is installed from within the running desktop application; it is not evidence of a standalone Android service binary.
-- The upstream Android Gradle host is still required to package the Python runtime, native dependencies, app lifecycle, storage and background work.
+- `Engine.start()` starts the RPC listener; `Engine.stop()` stops it.
+- RPC is disabled by default (`isAria2RpcEnabled = false`).
+- The configured default port is `16800`; allowed ports are 1024–65535.
+- The listener binds IPv4 loopback `127.0.0.1` and attempts IPv6 loopback `::1`.
+- HTTP POST and WebSocket requests use the `/jsonrpc` path.
+- The service implements a limited Aria2-compatible method set, including `aria2.getVersion`, `aria2.getGlobalOption`, and `aria2.addUri`.
+- The RPC token is configurable, but its default is the empty string. The inspected service checks the supplied token only when a non-empty configured secret exists. Therefore, enabling RPC without setting a strong token leaves the local listener without token authentication.
+- Upstream tests include an Android engine fixture and exercise IPv4/IPv6 loopback requests, but that does not prove the separate Android host's background lifecycle, port/token discovery, or integration stability for BareGhost.
 
-Therefore BareGhost may implement an Aria2-compatible client adapter later, but only after an authorized Ghost Android host/runtime is available and its supported process boundary is verified. Do not treat the RPC claim as resolving the missing Android host source.
+A separate Android app process on the same device can generally reach a loopback listener through `127.0.0.1:<port>`, because Android apps normally share the device network namespace. This makes a two-app proof-of-concept plausible, provided the Ghost Android app is installed and running, RPC is enabled, a strong token is configured, and the port is known.
 
-### RPC reachability clarification
+This remains only a **two-app bridge**, not the requested single-app integration. It does not launch or package Ghost's Python runtime, native dependencies, Android lifecycle, storage implementation, or foreground service inside BareGhost. The public `ghd` CLI is installed from within the running desktop application; it is not evidence of a standalone Android engine binary.
 
-The loopback binding does **not** inherently prevent another Android app process on the same device from connecting: Android apps normally share the device network namespace, so a client can attempt `127.0.0.1:<port>` while the Ghost listener is running. This makes a two-app proof-of-concept technically plausible, subject to Android lifecycle, port discovery, RPC token, and runtime permissions being verified.
+Security requirements for any prototype:
+1. Never enable Ghost RPC with an empty token.
+2. Generate and store a high-entropy token locally; do not expose it in logs, URLs, exported settings, or browser page JavaScript.
+3. Restrict the client to loopback and validate the expected listener/port before sending tasks.
+4. Do not forward browser cookies or authorization headers by default; require explicit per-download consent for session-bound requests.
+5. Treat RPC as an optional compatibility experiment only; it does not change the missing Android host source blocker.
 
-That does not satisfy the requested single-app design. It still requires the separate Ghost app/runtime to be installed and running, and it does not package Ghost's Python/native engine into BareGhost. Do not describe loopback as an absolute process-isolation barrier; the real blocker remains the separate Android host source and lifecycle/packaging integration.
-
+Therefore BareGhost may implement an Aria2-compatible client adapter as a separately testable experiment, but must not present it as an embedded Ghost engine or as completion of the single-app requirement. The authorized Android host source or a documented supported Android runtime/API is still required for the intended product.
