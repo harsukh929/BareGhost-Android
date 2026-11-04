@@ -63,3 +63,9 @@ This is useful as an interface reference, but it is **not by itself an embeddabl
 
 Therefore BareGhost may implement an Aria2-compatible client adapter later, but only after an authorized Ghost Android host/runtime is available and its supported process boundary is verified. Do not treat the RPC claim as resolving the missing Android host source.
 
+### RPC reachability clarification
+
+The loopback binding does **not** inherently prevent another Android app process on the same device from connecting: Android apps normally share the device network namespace, so a client can attempt `127.0.0.1:<port>` while the Ghost listener is running. This makes a two-app proof-of-concept technically plausible, subject to Android lifecycle, port discovery, RPC token, and runtime permissions being verified.
+
+That does not satisfy the requested single-app design. It still requires the separate Ghost app/runtime to be installed and running, and it does not package Ghost's Python/native engine into BareGhost. Do not describe loopback as an absolute process-isolation barrier; the real blocker remains the separate Android host source and lifecycle/packaging integration.
+
