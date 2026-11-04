@@ -31,4 +31,4 @@ The upstream Ghost APK is not a reusable library. Do not replace the missing hos
 ## Target
 Android ARM64 (`arm64-v8a`), with Bare's extension support where compatible, Ghost engines only where Android dependencies are verified, a compact in-player download affordance, and no DRM decryption or bypass.
 
-See `docs/ANDROID_AUDIT.md`, `docs/GHOST_ANDROID_BUILD.md`, `docs/BRIDGE_PROTOCOL.md`, `docs/BUILD_HOST.md`, and `LICENSES.md`.
+See `docs/ANDROID_AUDIT.md`, `docs/GHOST_ANDROID_BUILD.md`, `docs/GHOST_ANDROID_COMPATIBILITY.md`, `docs/BRIDGE_PROTOCOL.md`, `docs/BUILD_HOST.md`, and `LICENSES.md`.
