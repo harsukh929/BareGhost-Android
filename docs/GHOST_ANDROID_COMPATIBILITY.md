@@ -12,7 +12,7 @@ Checked 2026-11-04 against the public Ghost Downloader 3 issue tracker and build
 
 These are user-reported issues in Ghost's tracker, not claims that every device/version is affected:
 
-- Magnet/torrent parsing has had an Android report of `No parser matched` (issue #? in tracker search; verify exact issue number before citing).
+- Magnet/torrent parsing has had an Android report of `No parser matched` (reported in the upstream issue tracker).
 - eD2k has had Android crash reports.
 - Browser-extension panels and recording overlays have had touch usability problems on Android.
 - Custom download-folder handling has had secondary-user path issues.
