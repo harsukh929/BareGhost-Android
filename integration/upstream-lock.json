@@ -1,0 +1,29 @@
+{
+  "audited_at": "2026-11-04",
+  "bare_browser": {
+    "repository": "https://github.com/BareBrowser/bare-browser",
+    "commit": "e776f77629bb915e0f3df63449f1f993cc1b0648",
+    "version": "2.0.0-beta.6",
+    "chromium_version": "156.0.8078.73",
+    "chromium_commit": "2f9a11097447f226133bc1a31c787291a5eeab98",
+    "patches": 296,
+    "abi": "arm64"
+  },
+  "ghost_downloader": {
+    "repository": "https://github.com/XiaoYouChR/Ghost-Downloader-3",
+    "commit": "256b082166fec444b517dd3f4bb88c55ead1325b",
+    "inspected_release": "v4.4.5",
+    "abi": "arm64-v8a",
+    "android_adapters": [
+      "http_pack",
+      "ftp_pack",
+      "bittorrent_pack",
+      "ed2k_pack",
+      "m3u8_pack",
+      "yt_dlp_pack",
+      "bili_pack",
+      "github_pack",
+      "huggingface_pack"
+    ]
+  }
+}
