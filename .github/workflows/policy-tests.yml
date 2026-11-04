@@ -6,14 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  python-policy:
+  policy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Run format policy tests
+      - name: Validate upstream lock
+        run: python -m json.tool integration/upstream-lock.json >/dev/null
+      - name: Check shell scripts
+        run: bash -n scripts/*.sh
+      - name: Run policy tests
         run: python -m unittest discover -s tests -v
       - name: Compile Python sources
-        run: python -m compileall -q integration
+        run: python -m compileall -q integration tests
